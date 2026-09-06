@@ -35,3 +35,4 @@ ros2 run basics velocity_subscriber
 **Solucion**: Se agrego la fuente del espacio de trabajo (source ~/robotics_ws/install/setup.bash) al archivo ~/.bashrc para que las variables de entorno se carguen automaticamente en cada nueva terminal.
 
 ## Video de funcionamiento
+[Practica1.webm](https://github.com/user-attachments/assets/8090ebe5-1510-48a8-be96-2a1aed5ae069)
