@@ -33,3 +33,5 @@ ros2 run basics velocity_subscriber
 **Problema**: Al intentar ejecutar los comandos *ros2 run basics ...*, la terminal no me reconocia el paquete.
 
 **Solucion**: Se agrego la fuente del espacio de trabajo (source ~/robotics_ws/install/setup.bash) al archivo ~/.bashrc para que las variables de entorno se carguen automaticamente en cada nueva terminal.
+
+## Video de funcionamiento
