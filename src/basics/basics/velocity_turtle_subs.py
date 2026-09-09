@@ -1,30 +1,30 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Float32
+from geometry_msgs.msg import Twist
 
-#Este nodo recibe los mensajes, estos son de tipo Float32 
-#y se mandan por el topico /velocity
-class VelocitySubscriber(Node):
-    #Se crea el nodo y se hace la suscripcion
+
+class VelocityTurtleSubs(Node):
+
     def __init__(self):
-        super().__init__('velocity_subscriber')
-        self.subscription_ = self.create_subscription(Float32,'/velocity',self.velocity_callback,10)
+        super().__init__('velocity_turtle_subscriber')
+        
+        self.subscription_ = self.create_subscription(
+            Twist,
+            '/turtle1/cmd_vel',
+            self.velocity_callback,
+            10
+        )
+        self.get_logger().info('Suscriptor listo. Esperando mensajes...')
 
-    #Se ejecuta cada que llega un mensaje, imprime en pantalla el contenido
-    #con un decimal
     def velocity_callback(self, msg):
-        Velocity = msg.data
-        self.get_logger().info(f'Vel = {Velocity:.1f} m/s')
+        velocidad_x = msg.linear.x
+        self.get_logger().info(f'Velocidad recibida: {velocidad_x:.1f} m/s')
 
-#Establece la configuracion necesaria para ROS
-def main(args = None):
-    # Inicia las comunicaciones 
+
+def main(args=None):
     rclpy.init(args=args)
-    #crea al nodo
-    node = VelocitySubscriber()
-    #indica que el nodo se queda trabajando hasta que se indique que debe detenerse
+    node = VelocityTurtleSubs()
     rclpy.spin(node)
-    #destruye el nodo y cierra la comunicacion
     node.destroy_node()
     rclpy.shutdown()
 

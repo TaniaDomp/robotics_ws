@@ -1,41 +1,40 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Float32
+from geometry_msgs.msg import Twist
 
-#Este nodo manda los mensajes, estos son de tipo Float32 
-#y se mandan por el topico /velocity
-class VelocityPublisher(Node):
+
+class VelocityTurtlePub(Node):
 
     def __init__(self):
-        super().__init__('velocity_publisher')
-        self.publisher_ = self.create_publisher(Float32,'/velocity',10)
-        #Inicia el valor de la velocidad
-        self.Vel = 0.0
-        #indica que el mensaje se publica cada 0.5s (manda a llamar al metodo
-        #publish_velocity)
-        self.timer_ = self.create_timer(0.5,self.publish_velocity)
+        super().__init__('velocity_turtle_pub')
+
+        self.publisher_ = self.create_publisher(Twist, '/turtle1/cmd_vel', 10)
+
+        self.vel = 0.0
+        self.timer_ = self.create_timer(0.5, self.publish_velocity)
 
     def publish_velocity(self):
-        #Prepara el mensaje
-        msg = Float32()
-        msg.data = self.Vel
-        # Envia el mensaje al topico
-        self.publisher_.publish(msg)
-        self.get_logger().info(f'Vel = {self.Vel:.1f}')
+        msg = Twist()
 
-        #Se hace un bucle, cuando Vel llega a 1.5 se reincia a 0
-        if self.Vel < 1.5:
-            self.Vel = round(self.Vel + 0.1, 1)
+        if self.vel <= 1.2:
+            msg.linear.x = self.vel
+            self.publisher_.publish(msg)
+            self.get_logger().info(f'Velocidad enviada: {self.vel:.1f} m/s')
+            self.vel = round(self.vel + 0.1, 1)
         else:
-            self.Vel = 0.0
+            msg.linear.x = 0.0
+            self.publisher_.publish(msg)
+            self.get_logger().info('Velocidad maxima alcanzada (1.2 m/s). Tortuga deteniéndose.')
+            self.timer_.cancel() 
 
-#Establece la configuracion necesaria para ROS (igual que en el subscriber)
+
 def main(args=None):
     rclpy.init(args=args)
-    node = VelocityPublisher()
+    node = VelocityTurtlePub()
     rclpy.spin(node)
     node.destroy_node()
     rclpy.shutdown()
+
 
 if __name__ == '__main__':
     main()
