@@ -91,3 +91,4 @@ ros2 run basics velocity_turtle_pub
 **Solución:** Se limpiaron los directorios de compilación con rm *-rf build/ install/ log/* y se recompiló el paquete con *colcon build*.
 
 ### Video de funcionamiento
+[Practica2.webm](https://github.com/user-attachments/assets/e990a258-1449-4a30-b8ef-914a696dae70)
