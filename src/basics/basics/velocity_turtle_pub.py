@@ -2,20 +2,23 @@ import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
 
+#Este nodo envia la velocidad lineal que recibe turtlesim y el velocity_turtle_subs
+#Envia un mensaje Twist por medio del topico /turtle1/cmd_vel
 
 class VelocityTurtlePub(Node):
 
     def __init__(self):
         super().__init__('velocity_turtle_pub')
-
+        #Publicamos los mensajes
         self.publisher_ = self.create_publisher(Twist, '/turtle1/cmd_vel', 10)
-
+        #indica que el mensaje se publica cada 0.5s (manda a llamar al metodo
+        #publish_velocity)
         self.vel = 0.0
         self.timer_ = self.create_timer(0.5, self.publish_velocity)
 
+    #Se prepara el mensaje Twist (de una manera similar a como se hace en velocity_publisher)
     def publish_velocity(self):
         msg = Twist()
-
         if self.vel <= 1.2:
             msg.linear.x = self.vel
             self.publisher_.publish(msg)
