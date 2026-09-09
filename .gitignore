@@ -1,3 +1,8 @@
 build/
 install/
 log/
+src/basics/resource/
+src/basics/test/
+src/basics/package.xml
+src/basics/setup.cfg
+src/basics/setup.py
