@@ -183,3 +183,4 @@ ros2 run basics analog_subs
 **Solución:** Se desconecto y se volvió a conectar la tarjeta.
 
 ### Video de funcionamiento
+[P3_POT.webm](https://github.com/user-attachments/assets/82b04d8d-143f-44ff-bdab-3fcfb24dc4fe)
