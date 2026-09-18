@@ -1,7 +1,5 @@
 
 
-https://github.com/user-attachments/assets/9b9eb3bf-8cb7-4f17-872b-50b69e104469
-
 # Práctica: Publicador y Suscriptor de Velocidad en ROS 2
 
 **Autor:** Tania Ariadna Dominguez Palma
