@@ -92,3 +92,49 @@ ros2 run basics velocity_turtle_pub
 
 ### Video de funcionamiento
 [Practica2.webm](https://github.com/user-attachments/assets/e990a258-1449-4a30-b8ef-914a696dae70)
+
+## Práctica 3
+## Led blink
+### Descripción breve
+
+Integración y comunicación entre ROS 2 y una tarjeta ESP32 mediante puerto serie para el control de parpadeo de un LED, utilizando un nodo publicador de estados y un nodo puente (bridge) de comunicación serial.
+
+Modificaciones realizadas
+
+* Se implementó el tipo de mensaje `std_msgs/msg/Int32` para transmitir los estados de encendido (1) y apagado (0).
+
+* El nodo `led_blink.py` se diseñó para alternar el estado del LED (0 o 1) mediante un temporizador configurado a cada 1.0 segundo.
+
+* El nodo `serial_bridge.py` se configuró para suscribirse al tópico del LED y enviar las órdenes en formato de texto (`b'1\n'` / `b'0\n'`) a través del puerto serie (`/dev/ttyUSB0` a 115200 baudios).
+
+* Se incluyó la librería `pyserial` para la gestión de la interfaz de puerto serie en el nodo puente.
+
+### Funcionamiento
+
+* **Tópico utilizado:** `/led_command`
+
+* **Tipo de mensaje:** `std_msgs/msg/Int32`
+
+* **Publicador (led_blink.py):** Genera y conmuta el estado lógico (1 para encendido, 0 para apagado) cada segundo y lo transmite al tópico.
+
+* **Suscriptor / Puente (serial_bridge.py):** Escucha el tópico `/led_command` y retransmite las órdenes recibidas de ROS2 hacia la ESP32 a través de la conexión serial.
+
+### Comandos utilizados
+
+Para ejecutar en dos terminales separadas:
+
+```bash
+# Terminal 1: Lanzar el nodo puente de comunicación serial
+ros2 run basics serial_bridge
+
+# Terminal 2: Lanzar el nodo publicador para parpadeo del LED
+ros2 run basics led_blink
+```
+### Problemas encontrados y soluciones
+
+**Problema:** Cuando se trató de subir el código a la tarjeta aparecia un error de permisos.
+
+**Solución:** Se ejecutó el comando *sudo chmod 777 /dev/ttyUSB0* para establecer la conexión.
+
+### Video de funcionamiento
+
