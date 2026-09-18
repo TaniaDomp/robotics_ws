@@ -2,7 +2,7 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Int32
 
-
+#Este nodo publica mensajes Int32 en el topico /led_command (los estados son cero y uno)
 class LedBlink(Node):
     def __init__(self):
         super().__init__('led_blink')
@@ -13,6 +13,7 @@ class LedBlink(Node):
         self.get_logger().info('Nodo iniciado')
         self.publicar_estado()
 
+    #Se realiza el cambio de estado
     def blink_callback(self):
         if self.estado == 1:
             self.estado = 0
@@ -21,6 +22,7 @@ class LedBlink(Node):
 
         self.publicar_estado()
 
+    #Prepara el mensaje y lo publica
     def publicar_estado(self):
         msg = Int32()
         msg.data = self.estado

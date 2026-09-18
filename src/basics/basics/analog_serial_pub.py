@@ -3,16 +3,19 @@ from rclpy.node import Node
 from std_msgs.msg import Int32
 import serial
 
-
+#Este codigo crea un nodo que lee los mensajes recibidos de la ESP32, los convierte a un mensaje Int32
+#y los publica en el topico /analog
 class AnalogSerialPublisher(Node):
     def __init__(self):
         super().__init__('analog_serial_pub')
 
+        #Se realiza la conexion serial
         self.publisher_ = self.create_publisher(Int32,'/analog', 10)
         self.serial_ = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
         self.timer_ = self.create_timer(0.01, self.read_serial)
         self.get_logger().info('ESP32 conectada')
 
+    #Se leen y convierten los mensajes
     def read_serial(self):
         if self.serial_.in_waiting > 0:
             linea = self.serial_.readline().decode().strip()
