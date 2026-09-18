@@ -180,7 +180,83 @@ ros2 run basics analog_subs
 ### Problemas encontrados y soluciones
 **Problema:** Cuando se trató de subir el código no se mostraban los datos.
 
-**Solución:** Se desconecto y se volvió a conectar la tarjeta.
+**Solución:** Se desconectó y se volvió a conectar la tarjeta.
 
 ### Video de funcionamiento
 [P3_POT.webm](https://github.com/user-attachments/assets/82b04d8d-143f-44ff-bdab-3fcfb24dc4fe)
+
+## Tarea: Control Proporcional de Turtlesim mediante Joystick HW-504 y ESP32
+
+### Descripción breve
+
+Desarrollo e integración de un sistema en ROS2 para manipular la velocidad lineal y angular del simulador Turtlesim en tiempo real, empleando un joystick HW-504 conectado a una ESP32 mediante comunicación Serial USB.
+
+### Modificaciones y desarrollos realizados
+
+* Se programó la ESP32 en Arduino para realizar la lectura del joystick (ADC de 12 bits) y transmitirlos en formato `xValue \t yValue`.
+* Se implementó un nodo publicador en Python para leer de manera continua el puerto serie (`/dev/ttyUSB0`), extraer las lecturas y publicarlas en ROS2.
+* Se diseñó un nodo controlador que ajusta los valores del joystick aplicando filtrado por zona muerta y escalando los valores, convirtiendo las lecturas en comandos de velocidad.
+
+### Justificación Técnica de Parámetros de Control
+
+* **Valores del Centro (`CENTER_X = 1870`, `CENTER_Y = 1804`):** Se determinó que los valores neutros son $1870$ para el eje X y $1804$ para el eje Y por medio de la observación de los datos en el monitor serial de arduino.
+
+* **Zona Muerta (`DEAD_ZONE = ±250`):** Por medio de investigación (y observando el comportamiento de los valores en el monitor serial) se definió un margen de $\pm 250$ unidades alrededor de cada centro.
+
+* **Límites de Velocidad Máxima (`MAX_LIN_VEL = 2.0 m/s`, `MAX_ANG_VEL = 2.0 rad/s`):** Se establecieron en $2.0$ para asegurar una respuesta fluida dentro de Turtlesim ($11 \times 11$ metros). Con valores mayores la tortuga choca con las paredes demasiado rápido, mientras que con valores menores no se aprecia la aceleración.
+
+* **Control Proporcional fuera de la Zona Muerta:** Para evitar cambios bruscos de velocidad (escalones) al salir de la zona muerta, la función *calcular_velocidad_proporcional* mapea el recorrido restante hasta los extremos ($0$ y $4095$) para que la velocidad inicie de forma continua en $0.0$ justo al cruzar el límite de la zona muerta y alcance suavemente el $100\%$ ($\pm 1.0$) al llegar al tope físico.
+
+### Funcionamiento de los nodos y arquitectura
+
+* **Publicador Serial (`turtlejoy_pub.py`):**
+  * **Nombre del nodo:** `turtlejoy_pub`
+  * **Tópico publicado:** `/joystick_raw`
+  * **Tipo de mensaje:** `std_msgs/msg/Int32MultiArray`
+  * **Función:** Lee la trama serie enviada por la ESP32 a 115200 baudios, separa los valores numéricos mediante tabuladores y publica un arreglo de 2 enteros `[raw_x, raw_y]`.
+
+* **Controlador de Movimiento (`turtle_controller.py`):**
+  * **Nombre del nodo:** `turtle_controller`
+  * **Tópicos:** Subscrito a `/joystick_raw` | Publica en `/turtle1/cmd_vel`
+  * **Tipos de mensajes:** `std_msgs/msg/Int32MultiArray` y `geometry_msgs/msg/Twist`
+  * **Función:** Recibe las lecturas del ADC ($0$ a $4095$), descuenta el desplazamiento del centro mecánico, aplica la tolerancia de la zona muerta y calcula de forma proporcional el porcentaje de inclinación. Asigna el eje Y a la velocidad lineal `linear.x` (adelante/atrás) y el eje X a la velocidad angular `angular.z` (izquierda/derecha).
+
+* **Simulador Gráfico (`turtlesim_node`):**
+  * **Nombre del nodo:** `turtlesim`
+  * **Tópico suscrito:** `/turtle1/cmd_vel`
+  * **Tipo de mensaje:** `geometry_msgs/msg/Twist`
+  * **Función:** Recibe las velocidades vectoriales y ejecuta los movimientos físicos de la tortuga en la ventana gráfica.
+
+### Comandos utilizados
+
+Para ejecutar los programas en terminales separadas:
+
+```bash
+# Terminal 1: Lanzar la interfaz gráfica de Turtlesim
+ros2 run turtlesim turtlesim_node
+
+# Terminal 2: Lanzar el nodo publicador del puerto serie
+ros2 run basics turtlejoy_pub
+
+# Terminal 3: Lanzar el nodo controlador del movimiento
+ros2 run basics turtle_controller
+```
+
+Para el monitoreo de los nodos:
+
+```bash
+# Monitorear la lectura proveniente de la ESP32
+ros2 topic echo /joystick_raw
+
+# Monitorear las velocidades enviadas a la tortuga
+ros2 topic echo /turtle1/cmd_vel
+
+# Ver el grafo de los nodos
+ros2 run rqt_graph rqt_graph
+```
+### Problemas encontrados y soluciones
+**Problema:** No se tenia muy claro como se tomaban los ejes físicos.
+
+**Solución:** Se revisó documentación del joystick.
+
+### Video de funcionamiento
