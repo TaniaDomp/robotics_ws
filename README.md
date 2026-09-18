@@ -1,3 +1,7 @@
+
+
+https://github.com/user-attachments/assets/9b9eb3bf-8cb7-4f17-872b-50b69e104469
+
 # Práctica: Publicador y Suscriptor de Velocidad en ROS 2
 
 **Autor:** Tania Ariadna Dominguez Palma
@@ -137,4 +141,4 @@ ros2 run basics led_blink
 **Solución:** Se ejecutó el comando *sudo chmod 777 /dev/ttyUSB0* para establecer la conexión.
 
 ### Video de funcionamiento
-
+[P3_LEDB.webm](https://github.com/user-attachments/assets/a1a76d7f-2f34-4a60-b12b-6d33891f764c)
