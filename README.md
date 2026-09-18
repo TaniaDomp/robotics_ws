@@ -260,3 +260,7 @@ ros2 run rqt_graph rqt_graph
 **Solución:** Se revisó documentación del joystick.
 
 ### Video de funcionamiento
+https://github.com/user-attachments/assets/b42c2fd0-30c9-4c64-bce6-83f3adb0693a
+
+
+
