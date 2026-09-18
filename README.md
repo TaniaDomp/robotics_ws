@@ -140,3 +140,46 @@ ros2 run basics led_blink
 
 ### Video de funcionamiento
 [P3_LEDB.webm](https://github.com/user-attachments/assets/a1a76d7f-2f34-4a60-b12b-6d33891f764c)
+
+## Potenciómetro
+
+### Descripción breve
+
+Lectura y monitoreo de datos analógicos obtenidos desde una ESP32 a través de una interfaz serial en ROS 2 (datos de un potenciómetro), publicando las lecturas del convertidor ADC en un tópico para ser leídas por un nodo suscriptor.
+
+Modificaciones realizadas
+
+* Se empleó el tipo de mensaje `std_msgs/msg/Int32` para procesar y publicar los valores enteros leídos del puerto analógico.
+
+* El nodo `analog_serial_pub.py` se configuró para leer de forma continua (cada 0.01 segundos) la entrada serial desde la ESP32 a través de `/dev/ttyUSB0` a 115200 baudios, decodificar el texto, validar que sea un valor numérico e insertarlo en la trama de ROS2.
+
+* El nodo `analog_subscriber.py` se implementó para recibir las lecturas del ADC e imprimirlas directamente en la terminal en tiempo real.
+
+* Se utilizó la librería `pyserial` para la comunicación y lectura de los caracteres provenientes de la tarjeta de desarrollo.
+
+### Funcionamiento
+
+* **Tópico utilizado:** `/analog`
+
+* **Tipo de mensaje:** `std_msgs/msg/Int32`
+
+* **Publicador / Puente (analog_serial_pub.py):** Captura la lectura del puerto serie enviada por la ESP32, la convierte a un número entero y la publica en el tópico `/analog`.
+
+* **Suscriptor (analog_subscriber.py):** Se suscribe al tópico `/analog`, escucha las lecturas entrantes del ADC y despliega en pantalla los valores numéricos correspondientes.
+
+### Comandos utilizados
+
+```bash
+# Terminal 1: Lanzar el nodo puente de comunicación serial
+ros2 run basics analog_serial_pub
+
+# Terminal 2: Lanzar el nodo publicador para parpadeo del LED
+ros2 run basics analog_subs
+```
+
+### Problemas encontrados y soluciones
+**Problema:** Cuando se trató de subir el código no se mostraban los datos.
+
+**Solución:** Se desconecto y se volvió a conectar la tarjeta.
+
+### Video de funcionamiento
