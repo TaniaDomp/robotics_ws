@@ -263,4 +263,32 @@ ros2 run rqt_graph rqt_graph
 https://github.com/user-attachments/assets/b42c2fd0-30c9-4c64-bce6-83f3adb0693a
 
 
+## Tarea: Launch Publicador y publicador
 
+### Descripción breve
+En esta actividad se implementó el lanzamiento conjunto de múltiples nodos en ROS2 mediante un archivo *Launch*. Se utilizaron los nodos previos de publicación y suscripción de velocidad, configurando además el archivo de instalación del paquete.
+
+### Funcionamiento
+* **Tópico utilizado:** `/velocity`
+* **Tipo de mensaje:** `std_msgs/msg/Float32`
+
+* **Publicador (`velocity_publisher.py`):** Genera y empaqueta un valor de velocidad de tipo `Float32`. Muestra en la terminal el dato que envía y actualiza el valor periódicamente a través de un *timer*.
+* **Suscriptor (`velocity_subscriber.py`):** Se conecta al tópico `/velocity`, recibe los mensajes emitidos por el publicador y muestra la velocidad en la terminal.
+* **Archivo Launch (`velocity_system.launch.py`):** Define y arranca de manera centralizada la ejecución paralela de los nodos `velocity_publisher` y `velocity_subscriber` del paquete `basics`, canalizando sus salidas hacia la pantalla (`screen`).
+
+### Comandos utilizados
+
+Para ejecutar los nodos en una terminal:
+
+```bash
+ros2 launch basics velocity_system.launch.py
+```
+
+
+### Problemas encontrados y soluciones
+
+**Problema:** En esta ocasión no se presentaron problemas.
+
+**Solución:** En esta ocasión no se tuvieron que hacer modificaciones adicionales.
+
+### Video de funcionamiento
