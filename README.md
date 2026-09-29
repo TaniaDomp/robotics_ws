@@ -325,3 +325,7 @@ ros2 launch basics turtle_joystick.launch.py
 **Solución:** En esta ocasión no se tuvieron que hacer modificaciones adicionales.
 
 ### Video de funcionamiento
+https://github.com/user-attachments/assets/375a1d22-384f-4ee9-bfc0-77eeffd96c19
+
+
+
