@@ -266,9 +266,11 @@ https://github.com/user-attachments/assets/b42c2fd0-30c9-4c64-bce6-83f3adb0693a
 ## Tarea: Launch Publicador y publicador
 
 ### Descripción breve
+
 En esta actividad se implementó el lanzamiento conjunto de múltiples nodos en ROS2 mediante un archivo *Launch*. Se utilizaron los nodos previos de publicación y suscripción de velocidad, configurando además el archivo de instalación del paquete.
 
 ### Funcionamiento
+
 * **Tópico utilizado:** `/velocity`
 * **Tipo de mensaje:** `std_msgs/msg/Float32`
 
@@ -284,7 +286,6 @@ Para ejecutar los nodos en una terminal:
 ros2 launch basics velocity_system.launch.py
 ```
 
-
 ### Problemas encontrados y soluciones
 
 **Problema:** En esta ocasión no se presentaron problemas.
@@ -294,3 +295,33 @@ ros2 launch basics velocity_system.launch.py
 ### Video de funcionamiento
 https://github.com/user-attachments/assets/7799da2a-5e28-497b-aedd-8a81ed646fd3
 
+## Tarea: Launch turtle_joy_controller 
+
+### Descripción breve
+
+En esta actividad se implementó el lanzamiento conjunto del sistema de control de Turtlesim mediante un archivo *Launch*. Esto permite ejecutar en paralelo el simulador gráfico, el nodo de lectura serial de la ESP32 y el nodo controlador desde una sola terminal.
+
+### Funcionamiento
+
+* **Tópicos utilizados:** `/joystick_raw` y `/turtle1/cmd_vel`
+* **Tipos de mensaje:** `std_msgs/msg/Int32MultiArray` y `geometry_msgs/msg/Twist`
+
+* **Simulador Gráfico (`turtlesim_node`):** Inicializa el entorno interactivo de la tortuga para ejecutar los comandos de movimiento recibidos.
+* **Publicador Serial (`turtlejoy_pub.py`):** Lee las tramas del Joystick (HW-504 + ESP32) vía puerto serie y publica las lecturas del ADC en el tópico `/joystick_raw`.
+* **Controlador de Movimiento (`turtle_controller.py`):** Suscrito a `/joystick_raw`, procesa los valores aplicando zona muerta y control proporcional para publicar los comandos de velocidad vectorial en `/turtle1/cmd_vel`.
+* **Archivo Launch (`turtle_joystick.launch.py`):** Define y gestiona la ejecución simultánea de los tres nodos dentro del paquete `basics`, canalizando todas las salidas en consola hacia la terminal (`screen`).
+
+### Comandos utilizados
+
+Para ejecutar los nodos en una terminal:
+
+```bash
+ros2 launch basics turtle_joystick.launch.py
+```
+### Problemas encontrados y soluciones
+
+**Problema:** En esta ocasión no se presentaron problemas.
+
+**Solución:** En esta ocasión no se tuvieron que hacer modificaciones adicionales.
+
+### Video de funcionamiento
