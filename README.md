@@ -292,3 +292,5 @@ ros2 launch basics velocity_system.launch.py
 **Solución:** En esta ocasión no se tuvieron que hacer modificaciones adicionales.
 
 ### Video de funcionamiento
+https://github.com/user-attachments/assets/7799da2a-5e28-497b-aedd-8a81ed646fd3
+
